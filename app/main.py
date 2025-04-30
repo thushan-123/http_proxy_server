@@ -5,7 +5,7 @@ import threading
 
 def main(): 
     IP : str = "127.0.0.1"
-    PORT :int = 8000
+    PORT :int = 8001
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     server.bind((IP,PORT))
@@ -20,6 +20,14 @@ def main():
         client_socket , address = server.accept()
         print (client_socket)
         print(address)
+
+        client_socket.setblocking(False)
+
+        data = client_socket.recv(1024).decode("utf-8")
+
+        print(data)
+
+        client_socket.send(b"hello")
 
 
 
