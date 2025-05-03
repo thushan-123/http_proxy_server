@@ -6,16 +6,17 @@ class ConnectDestination():
         self.clientSocket = clientSocket
 
     def sendRequestDestination(self,webServerIp: str, port: int, request):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((webServerIp,port))
-        s.sendall(request)
+        destinationServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        destinationServer.connect((webServerIp,port))
+        destinationServer.sendall(request)
 
         # recive data from web server
 
         while True:
-            data: bytes = s.recv(1024)
+            data: bytes = destinationServer.recv(1024)
             if len(data) >0:
-                self.clientSocket.send(data)
+                return data
+                # self.clientSocket.send(data)
             else:
                 break
 
@@ -48,15 +49,4 @@ class HttpClientRequest():
             port = int(host[portStartIndex + 1:])
         
         return hostIp, port
-            
-
-# http = HttpClientRequest(request_text)
-# ip, port = http.getHost()
-
-# http.getHeaders()
-
-# print(ip)
-# print(port)
-
-
-# python .find()  value not in string return -1
+    
