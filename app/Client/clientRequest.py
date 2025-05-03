@@ -1,17 +1,23 @@
 import socket
 
-def handle_client_request():
-    pass
+class ConnectDestination():
 
+    def __init__(self, clientSocket: socket.socket):
+        self.clientSocket = clientSocket
 
-request_text = b"""GET http://192.168.8.12:800/indc.kl HTTP/1.1
-Host: 192.168.8.12:443
-User-Agent: curl/8.12.1
-Accept: */*
-Proxy-Connection: Keep-Alive"""
+    def sendRequestDestination(self,webServerIp: str, port: int, request):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((webServerIp,port))
+        s.sendall(request)
 
-print(request_text)
+        # recive data from web server
 
+        while True:
+            data: bytes = s.recv(1024)
+            if len(data) >0:
+                self.clientSocket.send(data)
+            else:
+                break
 
 class HttpClientRequest():
     
@@ -42,26 +48,15 @@ class HttpClientRequest():
             port = int(host[portStartIndex + 1:])
         
         return hostIp, port
-    
-    def getHeaders(self):
-        headersSplit :list = self.httpRequest.split("\n")
-        
-
-        for header in headersSplit:
-            print(header.strip())
-            print(header.split(":"))
             
-        
 
+# http = HttpClientRequest(request_text)
+# ip, port = http.getHost()
 
+# http.getHeaders()
 
-http = HttpClientRequest(request_text)
-ip, port = http.getHost()
-
-http.getHeaders()
-
-print(ip)
-print(port)
+# print(ip)
+# print(port)
 
 
 # python .find()  value not in string return -1
